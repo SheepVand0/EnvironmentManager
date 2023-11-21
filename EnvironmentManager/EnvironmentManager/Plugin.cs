@@ -1,4 +1,5 @@
-﻿using IPA;
+﻿using HarmonyLib;
+using IPA;
 using IPALogger = IPA.Logging.Logger;
 
 namespace EnvironmentManager
@@ -12,6 +13,8 @@ namespace EnvironmentManager
         /// </summary>
         internal static IPALogger Log { get; private set; }
 
+        protected static Harmony m_Harmony = new Harmony("sheepvand.environmentmanager");
+
         [Init]
         public Plugin(IPALogger logger)
         {
@@ -22,13 +25,13 @@ namespace EnvironmentManager
         [OnStart]
         public void OnApplicationStart()
         {
-            Plugin.Log.Info("OnApplicationStart");
+            m_Harmony.PatchAll();
         }
 
         [OnExit]
         public void OnApplicationQuit()
-        {
-
+        { 
+            m_Harmony.UnpatchSelf();
         }
 
     }

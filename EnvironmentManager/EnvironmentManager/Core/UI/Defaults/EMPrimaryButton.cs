@@ -22,5 +22,6 @@ namespace EnvironmentManager.Core.UI.Defaults
         {
             return EMUIDefaults.GetPrimaryElemsColor();
         }
+
     }
 }

@@ -28,8 +28,14 @@ namespace EnvironmentManager.Core.UI.Defaults
             SetWidth(m_Width);
             SetHeight(m_Height);
 
-            p_Button.SetBackgroundColor(new Color(0, 0, 0, 0.7f));
+            p_Button.SetBackgroundColor(GetBackgroundColor().ColorWithAlpha(0.9f));
             p_Button.SetBackgroundSprite(EMUIDefaults.GetRoundedBackground(m_Width, m_Height));
+        }
+
+        public EMBaseButton Bind(ref EMBaseButton p_Object)
+        {
+            p_Object = this;
+            return this;
         }
     }
 }
