@@ -15,7 +15,8 @@ namespace EnvironmentManager.Config
         internal static EMProfile s_DefaultConfig = new EMProfile(false);
 
         [JsonProperty] internal bool IsEnabled = true;
-        
+        [JsonProperty] internal int SelectedIndex = 0;
+
         [JsonProperty] internal List<EMProfile> UserProfiles = new List<EMProfile>();
 
         public bool ProfileNameAlreadyExists(string p_Name)
@@ -70,6 +71,7 @@ namespace EnvironmentManager.Config
 
             [JsonProperty] internal bool Deletable = true;
             [JsonProperty] internal List<EMEditedElement> EditedElements = new List<EMEditedElement>();
+            [JsonProperty] internal List<EMEditedLight> EditedLights = new List<EMEditedLight>();
 
             [JsonProperty] internal bool InvertLights;
             internal EMProfile()

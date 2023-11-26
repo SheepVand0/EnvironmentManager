@@ -1,7 +1,9 @@
-﻿using CP_SDK.UI;
+﻿using BeatSaberMarkupLanguage;
+using BeatSaberPlus.SDK.UI;
 using CP_SDK.XUI;
 using EnvironmentManager.Config;
 using EnvironmentManager.Core.UI.Defaults;
+using EnvironmentManager.Core.UI.ProfileEdit;
 using EnvironmentManager.Core.UI.ProfileSelection.Components;
 using System;
 using System.Collections.Generic;
@@ -110,7 +112,10 @@ namespace EnvironmentManager.Core.UI.ProfileSelection
 
         protected void EditProfile()
         {
-            
+            if (ProfileEditFlowCoordinator.Instance == null)
+                ProfileEditFlowCoordinator.Instance = BeatSaberUI.CreateFlowCoordinator<ProfileEditFlowCoordinator>();
+
+            ProfileEditFlowCoordinator.Instance.Present();
         }
 
         protected void RenameProfile()

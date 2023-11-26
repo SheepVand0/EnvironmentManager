@@ -1,4 +1,5 @@
-﻿using CP_SDK.XUI;
+﻿using BeatSaberMarkupLanguage;
+using CP_SDK.XUI;
 using EnvironmentManager.Core.UI.Defaults;
 using EnvironmentManager.Core.UI.ProfileSelection;
 using System;
@@ -43,9 +44,12 @@ namespace EnvironmentManager.Core.UI
                 l_Place = GameObject.Find("EnvironmentOverrideSettings"/*.Settings.Elements"*/);
                 return l_Place != null;
             }, 1);
-            
+
             if (l_Place == null)
+            {
                 Plugin.Log.Error("Cannot find environment settings panel");
+                return;
+            }
 
             XUIVLayout.Make(
                 EMSecondaryButton.Make("Environment Manager Settings", 40, 5, OpenSettings)
@@ -66,7 +70,7 @@ namespace EnvironmentManager.Core.UI
         protected void OpenSettings()
         {
             if (ProfileSelectionFlowCoordinator.Instance == null)
-                ProfileSelectionFlowCoordinator.Instance = ProfileSelectionFlowCoordinator.Instance();
+                ProfileSelectionFlowCoordinator.Instance = BeatSaberUI.CreateFlowCoordinator<ProfileSelectionFlowCoordinator>();
 
             ProfileSelectionFlowCoordinator.Instance.Present();
         }

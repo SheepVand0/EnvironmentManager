@@ -56,6 +56,16 @@
       <Private>False</Private>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="BSML">
+      <HintPath>$(BeatSaberDir)\Plugins\BSML.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Colors">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Colors.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="GameplayCore">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\GameplayCore.dll</HintPath>
       <Private>False</Private>
@@ -73,6 +83,11 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(BeatSaberDir)\Libs\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="SongCore">
+      <HintPath>$(BeatSaberDir)\Plugins\SongCore.dll</HintPath>
       <Private>False</Private>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
@@ -106,9 +121,24 @@
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="UnityEngine.StreamingModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.StreamingModule.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UI.dll</HintPath>
@@ -126,19 +156,43 @@
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.VRModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Zenject">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Zenject.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Zenject-usage">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Zenject-usage.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\EMConfig.cs" />
     <Compile Include="Core\Animation.cs" />
+    <Compile Include="Core\AssemblyUtils.cs" />
+    <Compile Include="Core\EnvironmentManipulator.cs" />
     <Compile Include="Core\Harmony\EnvironmentSettingsMenuPatch.cs" />
+    <Compile Include="Core\UI\CustomFlowCoordinator.cs" />
     <Compile Include="Core\UI\Defaults\EMBaseButton.cs" />
     <Compile Include="Core\UI\Defaults\EMPrimaryButton.cs" />
     <Compile Include="Core\UI\Defaults\EMSecondaryButton.cs" />
+    <Compile Include="Core\UI\Defaults\EMSlider.cs" />
+    <Compile Include="Core\UI\Defaults\EMText.cs" />
+    <Compile Include="Core\UI\Defaults\EMTextInput.cs" />
     <Compile Include="Core\UI\Defaults\EMToggleSetting.cs" />
     <Compile Include="Core\UI\Defaults\EMUIDefaults.cs" />
+    <Compile Include="Core\UI\Defaults\EMVector3Parameter.cs" />
     <Compile Include="Core\UI\EMSettingsButton.cs" />
+    <Compile Include="Core\UI\Helper.cs" />
+    <Compile Include="Core\UI\ProfileEdit\Components\XUIEditedObject.cs" />
+    <Compile Include="Core\UI\ProfileEdit\EnvironmentObjectsListViewController.cs" />
     <Compile Include="Core\UI\ProfileEdit\ProfileEditFlowCoordinator.cs" />
     <Compile Include="Core\UI\ProfileEdit\ProfileEditViewController.cs" />
+    <Compile Include="Core\UI\ProfileEdit\RightProfileEditViewController.cs" />
+    <Compile Include="Core\UI\ProfileEdit\Widgets\LightEditView.cs" />
+    <Compile Include="Core\UI\ProfileEdit\Widgets\ObjectEditView.cs" />
+    <Compile Include="Core\UI\ProfileEdit\Widgets\XUIListSelectable.cs" />
     <Compile Include="Core\UI\ProfileSelection\Components\XUIProfileText.cs" />
     <Compile Include="Core\UI\ProfileSelection\ProfileSelectionFlowCoordinator.cs" />
     <Compile Include="Core\UI\ProfileSelection\ProfileSelectionViewController.cs" />
@@ -155,6 +209,7 @@
   <ItemGroup>
     <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')" />
     <None Include="EnvironmentManager.csproj.user" Condition="Exists('EnvironmentManager.csproj.user')" />
+    <EmbeddedResource Include="Resources\Teko-Medium.ttf" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BeatSaberModdingTools.Tasks">

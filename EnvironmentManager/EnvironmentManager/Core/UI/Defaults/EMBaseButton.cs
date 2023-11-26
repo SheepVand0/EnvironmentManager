@@ -23,6 +23,11 @@ namespace EnvironmentManager.Core.UI.Defaults
             OnReady(SetupStyle);
         }
 
+        protected EMBaseButton(string p_Label, Action p_OnClick = null) : this(p_Label, 15, 5, p_OnClick: p_OnClick)
+        {
+            OnReady(SetupStyle);
+        }
+
         private void SetupStyle(CSecondaryButton p_Button)
         {
             SetWidth(m_Width);

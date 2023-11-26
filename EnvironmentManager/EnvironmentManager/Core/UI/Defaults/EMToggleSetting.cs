@@ -19,10 +19,16 @@ namespace EnvironmentManager.Core.UI.Defaults
             OnValueChanged(OnToggleChanged);
         }
 
+        ////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////
+
         internal static new EMToggleSetting Make()
         {
             return new EMToggleSetting("EnvironmentManagerToggleSetting");
         }
+
+        ////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////
 
         protected void SetupStyle(CToggle p_Toggle)
         {
@@ -49,6 +55,9 @@ namespace EnvironmentManager.Core.UI.Defaults
             l_KnobImage.color = p_Color;
         }
 
+        ////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////
+
         protected async void OnToggleChanged(bool p_Value)
         {
             int l_Index = 0;
@@ -65,6 +74,15 @@ namespace EnvironmentManager.Core.UI.Defaults
                 l_Index += 1;
                 return l_Index < 500;
             }, 1);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////
+        
+        public EMToggleSetting Bind(ref EMToggleSetting p_Toggle)
+        {
+            p_Toggle = this;
+            return this;
         }
     }
 }

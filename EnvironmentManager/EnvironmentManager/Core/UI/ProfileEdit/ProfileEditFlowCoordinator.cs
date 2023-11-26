@@ -1,4 +1,5 @@
-﻿using CP_SDK.UI;
+﻿using BeatSaberMarkupLanguage;
+using CP_SDK.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,15 +8,25 @@ using System.Threading.Tasks;
 
 namespace EnvironmentManager.Core.UI.ProfileEdit
 {
-    internal class ProfileEditFlowCoordinator : CP_SDK.UI.FlowCoordinator<ProfileEditFlowCoordinator>
+    internal class ProfileEditFlowCoordinator : CustomFlowCoordinator
     {
-        public override string Title => "Environment Manager";
+        protected override string Title => "Environment Manager";
 
+        public static ProfileEditFlowCoordinator Instance;
 
-
-        protected override (IViewController, IViewController, IViewController) GetInitialViewsController()
+        protected override void OnCreation()
         {
-            throw new NotImplementedException();
+            Instance = this;
+        }
+
+        public ProfileEditViewController ViewController = BeatSaberUI.CreateViewController<ProfileEditViewController>();
+
+        public RightProfileEditViewController RightView = BeatSaberUI.CreateViewController<RightProfileEditViewController>();
+        public EnvironmentObjectsListViewController LeftView = BeatSaberUI.CreateViewController<EnvironmentObjectsListViewController>();
+
+        protected override (HMUI.ViewController, HMUI.ViewController, HMUI.ViewController) GetUIImplementation()
+        {
+            return (ViewController, LeftView, RightView);
         }
     }
 }
