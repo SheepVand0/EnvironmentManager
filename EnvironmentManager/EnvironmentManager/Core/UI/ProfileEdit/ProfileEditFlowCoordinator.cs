@@ -1,5 +1,6 @@
 ﻿using BeatSaberMarkupLanguage;
 using CP_SDK.UI;
+using HMUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace EnvironmentManager.Core.UI.ProfileEdit
         protected override void OnCreation()
         {
             Instance = this;
+            topViewController.__Deactivate(false, true, false);
         }
 
         public ProfileEditViewController ViewController = BeatSaberUI.CreateViewController<ProfileEditViewController>();
@@ -28,5 +30,11 @@ namespace EnvironmentManager.Core.UI.ProfileEdit
         {
             return (ViewController, LeftView, RightView);
         }
+
+        protected override void OnShow()
+        {
+            _ = EnvironmentManipulator.LoadEnvironment();
+        }
+
     }
 }

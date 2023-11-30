@@ -173,6 +173,7 @@
     <Compile Include="Core\AssemblyUtils.cs" />
     <Compile Include="Core\EnvironmentManipulator.cs" />
     <Compile Include="Core\Harmony\EnvironmentSettingsMenuPatch.cs" />
+    <Compile Include="Core\Harmony\OnGameStarted.cs" />
     <Compile Include="Core\UI\CustomFlowCoordinator.cs" />
     <Compile Include="Core\UI\Defaults\EMBaseButton.cs" />
     <Compile Include="Core\UI\Defaults\EMPrimaryButton.cs" />

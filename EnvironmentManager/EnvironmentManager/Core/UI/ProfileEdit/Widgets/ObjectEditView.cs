@@ -127,9 +127,9 @@ namespace EnvironmentManager.Core.UI.ProfileEdit.Widgets
             m_Object.Move = m_MoveToggle.Element.GetValue();
             EMConfig.Instance.UserProfiles[EMConfig.Instance.SelectedIndex].EditedElements[l_Index] = m_Object;
             EMConfig.Instance.Save();
-        }
 
-        
+            EnvironmentManipulator.ApplyProfile(EMConfig.Instance.UserProfiles[EMConfig.Instance.SelectedIndex]);
+        }
 
         private void OnSliderChanged(Vector3 p_Ignored)
         {
@@ -140,6 +140,8 @@ namespace EnvironmentManager.Core.UI.ProfileEdit.Widgets
             m_Object.CustomScale = m_ScaleParam.GetValue();
             EMConfig.Instance.UserProfiles[EMConfig.Instance.SelectedIndex].EditedElements[l_Index] = m_Object;
             EMConfig.Instance.Save();
+
+            EnvironmentManipulator.ApplyProfile(EMConfig.Instance.UserProfiles[EMConfig.Instance.SelectedIndex]);
         }
 
         public void SetObject(EMConfig.EMEditedElement p_Object)

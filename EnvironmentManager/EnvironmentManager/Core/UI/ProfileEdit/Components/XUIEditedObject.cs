@@ -67,7 +67,6 @@ namespace EnvironmentManager.Core.UI.ProfileEdit.Components
         public void SetObject(EMConfig.EMEditedLight p_Light)
         {
             m_ObjectType = EObjectType.Light;
-            SetText(p_Light.Name);
 
             m_LightData = p_Light;
         }

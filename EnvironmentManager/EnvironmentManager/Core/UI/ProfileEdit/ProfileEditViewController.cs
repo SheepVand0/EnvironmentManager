@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace EnvironmentManager.Core.UI.ProfileEdit
 {
@@ -15,6 +16,7 @@ namespace EnvironmentManager.Core.UI.ProfileEdit
     {
         protected XUIVScrollView m_UIEditedElementsScroll;
         protected EMText m_Title;
+        protected EMBaseButton m_AddLightButton;
 
         //////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////
@@ -41,13 +43,10 @@ namespace EnvironmentManager.Core.UI.ProfileEdit
             await WaitUtils.Wait(() => m_UIEditedElementsScroll != null, 1);
 
             SetToEditedElements();
-
-            _ = EnvironmentManipulator.LoadEnvironment();
         }
 
         protected override void OnViewDeactivation()
         {
-            EnvironmentManipulator.UnloadEnvironment();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -64,14 +63,41 @@ namespace EnvironmentManager.Core.UI.ProfileEdit
 
                         ).Bind(ref m_UIEditedElementsScroll)
                     )
-                    .SetHeight(80)
+                    .SetHeight(120)
                     .OnReady(x => x.CSizeFitter.horizontalFit = x.CSizeFitter.verticalFit = UnityEngine.UI.ContentSizeFitter.FitMode.Unconstrained)
-                    .OnReady(x => x.HOrVLayoutGroup.childForceExpandHeight = x.HOrVLayoutGroup.childForceExpandWidth = true)
+                    .OnReady(x => x.HOrVLayoutGroup.childForceExpandHeight = x.HOrVLayoutGroup.childForceExpandWidth = true),
+                XUIHLayout.Make(
+                    EMPrimaryButton.Make("Switch", 20, 5)
+                    .OnClick(() =>
+                    {
+                        if (m_EditMode == EEditMode.Objects)
+                        {
+                            SetToEditedLightsList();
+                        }
+                        else
+                        {
+                            SetToEditedElements();
+                        }
+                    }),
+                    EMPrimaryButton.Make("Add", 20, 5)
+                        .Bind(ref m_AddLightButton)
+                        .OnClick(AddLight)
+                ),
+                EMSecondaryButton.Make("Exit", 40, 5).OnClick(() =>
+                {
+                    EnvironmentManipulator.UnloadEnvironment(async () =>
+                    {
+                        await Task.Delay(500);
+
+                        ProfileEditFlowCoordinator.Instance.Dismiss();
+                    });
+                })
                 ).BuildUI(transform);
         }
 
         public void SetToEditedElements()
         {
+            m_AddLightButton.SetActive(false);
             m_EditMode = EEditMode.Objects;
             HideUIEditedLights();
             HideOldEditedElements();
@@ -83,32 +109,45 @@ namespace EnvironmentManager.Core.UI.ProfileEdit
                 XUIEditedObject l_Object = XUIEditedObject.Make();
                 return l_Object;
             },
-            (x, y) => y.SetObject(x));
+            (x, y) => { y.SetObject(x); y.SetActive(true); });
 
             m_Title.SetText("Edit Objects");
         }
 
         public void SetToEditedLightsList()
         {
+            m_AddLightButton.SetActive(true);
             m_EditMode = EEditMode.Lights;
             HideUIEditedObjects();
             HideOldEditedElements();
 
+            var l_Lights = EMConfig.Instance.UserProfiles[EMConfig.Instance.SelectedIndex].EditedLights;
+
             Helper.DisplayListOnUI(
-                EMConfig.Instance.UserProfiles[EMConfig.Instance.SelectedIndex].EditedLights, ref m_EditedObjectsList,
+                l_Lights, ref m_EditedObjectsLights,
                 m_UIEditedElementsScroll.Element.Container, () =>
                 {
                     XUIEditedObject l_Object = XUIEditedObject.Make();
                     return l_Object;
                 }, 
-                (x, y) => { y.SetObject(x); y.SetText(x.Name); });
+                (x, y) => { y.SetObject(x); y.SetText($"Light{l_Lights.IndexOf(x)}"); y.SetActive(true); });
 
             m_Title.SetText("Edit Lights");
         }
 
         ////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////
-        
+
+        private void AddLight()
+        {
+            EMConfig.Instance.UserProfiles[EMConfig.Instance.SelectedIndex].EditedLights.Add(new EMConfig.EMEditedLight());
+            EMConfig.Instance.Save();
+            SetToEditedLightsList();
+        }
+
+        ////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////
+
         private void HideOldEditedElements()
         {
             if (m_EditMode == EEditMode.Lights)

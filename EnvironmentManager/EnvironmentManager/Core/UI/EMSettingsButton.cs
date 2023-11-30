@@ -1,5 +1,6 @@
 ﻿using BeatSaberMarkupLanguage;
 using CP_SDK.XUI;
+using EnvironmentManager.Config;
 using EnvironmentManager.Core.UI.Defaults;
 using EnvironmentManager.Core.UI.ProfileSelection;
 using System;
@@ -52,15 +53,17 @@ namespace EnvironmentManager.Core.UI
             }
 
             XUIVLayout.Make(
-                EMSecondaryButton.Make("Environment Manager Settings", 40, 5, OpenSettings)
+                EMSecondaryButton.Make("Environment Manager Settings", 60, 5, OpenSettings)
                 .Bind(ref m_SettingsButton),
                 XUIHLayout.Make(
                     XUIText.Make("Mod enabled:"),
                     EMToggleSetting.Make()
+                    .SetValue(EMConfig.Instance.IsEnabled, true)
+                    .OnValueChanged(x => { EMConfig.Instance.IsEnabled = x; EMConfig.Instance.Save(); m_SettingsButton.SetInteractable(x); })
                     .Bind(ref m_ModEnableToggle)
                 )
             )
-            .SetWidth(40)
+            .SetWidth(60)
             .SetHeight(20)
             .BuildUI(l_Place.transform);
 

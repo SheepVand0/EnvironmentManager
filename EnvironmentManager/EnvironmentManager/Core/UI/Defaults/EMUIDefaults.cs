@@ -31,12 +31,12 @@ namespace EnvironmentManager.Core.UI.Defaults
 
         public static Color GetSecondaryElemsColor()
         {
-            return new Color(0, 0, 0, 0.8f);
+            return new Color(0, 0, 0, 0.9f);
         }
 
         public static Color GetPrimaryElemsColor()
         {
-            return new Color(0, .12f, .36f, .9f);
+            return new Color(0, .12f, .56f, .9f);
         }
 
     }

@@ -48,14 +48,6 @@ namespace EnvironmentManager.Core.UI.ProfileEdit
         //////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////
 
-        protected override void OnViewActivation()
-        {
-            UpdateObjects();
-        }
-
-        //////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////
-
         public async void UpdateObjects()
         {
             await WaitUtils.Wait(() => EnvironmentManipulator.EnvironmentLoaded == true, 1);
@@ -77,5 +69,6 @@ namespace EnvironmentManager.Core.UI.ProfileEdit
                 });
 
         }
+
     }
 }

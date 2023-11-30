@@ -26,9 +26,9 @@ namespace EnvironmentManager.Core.UI
                 {
                     t_ObjectType l_NewObject = p_MakeElement.Invoke();
                     l_UIList.Add(l_NewObject);
+                    l_UIList[l_i].BuildUI(p_Location);
                 }
                 p_Callback.Invoke(p_BaseList[l_i], l_UIList[l_i]);
-                l_UIList[l_i].BuildUI(p_Location);
             }
 
             p_UIObjectList = l_UIList;

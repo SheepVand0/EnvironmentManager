@@ -162,6 +162,8 @@ namespace EnvironmentManager.Core.UI.ProfileSelection
             ExportProfileButton.SetInteractable(p_ProfileIndex >= -1);
 
             m_SelectedProfile = p_ProfileIndex;
+            EMConfig.Instance.SelectedIndex = m_SelectedProfile;
+            EMConfig.Instance.Save();
         }
     }
 }

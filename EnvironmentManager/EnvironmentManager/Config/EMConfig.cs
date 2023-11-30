@@ -56,10 +56,9 @@ namespace EnvironmentManager.Config
 
         internal class EMEditedLight
         {
-            [JsonProperty] internal string Name;
-            [JsonProperty] internal int LightIndex;
-            [JsonProperty] internal Color LeftColor;
-            [JsonProperty] internal Color RightColor;
+            [JsonProperty] internal int LightIndex = 0;
+            [JsonProperty] internal Color LeftColor = new Color(1, 0, 0, 1);
+            [JsonProperty] internal Color RightColor = new Color(0, 0, 1, 1);
         }
 
         internal class EMProfile

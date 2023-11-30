@@ -13,7 +13,7 @@ namespace EnvironmentManager
         /// </summary>
         internal static IPALogger Log { get; private set; }
 
-        protected static Harmony m_Harmony = new Harmony("sheepvand.environmentmanager");
+        public static Harmony s_Harmony = new Harmony("sheepvand.environmentmanager");
 
         [Init]
         public Plugin(IPALogger logger)
@@ -25,13 +25,13 @@ namespace EnvironmentManager
         [OnStart]
         public void OnApplicationStart()
         {
-            m_Harmony.PatchAll();
+            s_Harmony.PatchAll();
         }
 
         [OnExit]
         public void OnApplicationQuit()
         { 
-            m_Harmony.UnpatchSelf();
+            s_Harmony.UnpatchSelf();
         }
 
     }
