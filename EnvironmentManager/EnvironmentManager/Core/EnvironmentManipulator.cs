@@ -94,6 +94,7 @@ namespace EnvironmentManager.Core
 
                     Resources.FindObjectsOfTypeAll<EnvironmentObjectsListViewController>().First().UpdateObjects();
 
+                    await ShowAllOnEnvironment(true, true);
                     ApplyProfile(EMConfig.Instance.UserProfiles[EMConfig.Instance.SelectedIndex]);
 
                     Plugin.s_Harmony.PatchAll();
@@ -147,7 +148,7 @@ namespace EnvironmentManager.Core
 
         public static List<GameObject> ToActivate = new List<GameObject>();
 
-        public static async Task<Task> ShowAllOnEnvironment(bool p_Active)
+        public static async Task<Task> ShowAllOnEnvironment(bool p_Active, bool p_RespawnEnvironment = false)
         {
             GameObject l_Environment = null;
             await WaitUtils.Wait(() =>
@@ -160,9 +161,12 @@ namespace EnvironmentManager.Core
                 return true;
             }, 10);
 
-            l_Environment.SetActive(false);
-            await Task.Delay(100);
-            l_Environment.SetActive(true);
+            if (p_RespawnEnvironment == true)
+            {
+                l_Environment.SetActive(false);
+                await Task.Delay(100);
+                l_Environment.SetActive(true);
+            }
 
             bool l_SetHiddenElems = ToActivate.Any() == false;
 
@@ -185,6 +189,14 @@ namespace EnvironmentManager.Core
 
         public static Dictionary<GameObject, (Vector3, Vector3, Vector3)> sOriginalPositions = new Dictionary<GameObject, (Vector3, Vector3, Vector3)>();
 
+        public static void ActiveAllObjectsOfType<t_CompType>(bool p_Active) where t_CompType : MonoBehaviour
+        {
+            foreach (var l_Index in Resources.FindObjectsOfTypeAll<t_CompType>())
+            {
+                l_Index.gameObject.SetActive(p_Active);
+            }
+        }
+
         public static async void ApplyObjectConfig(EMConfig.EMEditedElement p_Object)
         {
             if (p_Object == null) return;
@@ -200,7 +212,12 @@ namespace EnvironmentManager.Core
                 return true;
             }, 10);
 
-            GameObject l_Object = l_PreObject.transform.Find(p_Object.Name).gameObject;
+
+            Transform l_PreTransform = l_PreObject.transform.Find(p_Object.Name);
+
+            if (l_PreTransform == null) return;
+
+            GameObject l_Object = l_PreTransform.gameObject;
 
             if (l_Object == null) return;
 
@@ -278,6 +295,30 @@ namespace EnvironmentManager.Core
             } 
 
             ApplyLights(p_Profile.EditedLights);
+
+            TrackLaneRingsManager[] l_Managers = Resources.FindObjectsOfTypeAll<TrackLaneRingsManager>();
+            foreach (var l_Manager in l_Managers)
+            {
+                for (int l_i = 0; l_i < l_Manager.Rings.Length; l_i++)
+                {
+                    l_Manager.Rings[l_i].gameObject.SetActive(l_i < p_Profile.RingsCount);
+                }
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////
+
+        public static async Task<Task> IsolateObject(string p_ObjectName)
+        {
+            await ShowAllOnEnvironment(false);
+
+            var l_Object = GameObject.Find(p_ObjectName);
+            if (l_Object == null) return Task.CompletedTask;
+
+            l_Object.SetActive(true);
+
+            return Task.CompletedTask;
         }
 
         //////////////////////////////////////////////////////////////////////

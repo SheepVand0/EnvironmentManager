@@ -57,6 +57,8 @@ namespace EnvironmentManager.Core.UI.ProfileSelection
 
         internal void RefreshProfileList()
         {
+            foreach (var l_Index in m_UIProfiles)
+                l_Index.SetActive(false);
 
             for (int l_i = 0; l_i < EMConfig.Instance.UserProfiles.Count();l_i++)
             {
@@ -67,6 +69,7 @@ namespace EnvironmentManager.Core.UI.ProfileSelection
                     m_UIProfiles.Add(l_Text);
                 }
                 m_UIProfiles[l_i].SetProfile(EMConfig.Instance.UserProfiles[l_i].Name, l_i);
+                m_UIProfiles[l_i].SetActive(true);
             }
         }
 

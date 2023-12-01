@@ -97,7 +97,15 @@ namespace EnvironmentManager.Core.UI.ProfileEdit.Widgets
                             EMVector3Parameter.Make()
                                 .Bind(ref m_ScaleParam)
                                 .OnValueChanged(OnSliderChanged)
-                        )
+                        ),
+                        EMSecondaryButton.Make("Delete", 40, 5, () =>
+                        {
+                            EMConfig.Instance.UserProfiles[EMConfig.Instance.SelectedIndex].EditedElements.RemoveAt(GetIndexOfCurrentElement());
+                            EMConfig.Instance.Save();
+                            SetActive(false);
+                            ProfileEditViewController.Instance.SetToEditedElements();
+                            EnvironmentManipulator.ApplyProfile(EMConfig.Instance.UserProfiles[EMConfig.Instance.SelectedIndex]);
+                        })
                     )
                 ).OnReady(x => x.CSizeFitter.horizontalFit = x.CSizeFitter.verticalFit = UnityEngine.UI.ContentSizeFitter.FitMode.Unconstrained)
                  .OnReady(x => x.HOrVLayoutGroup.childForceExpandHeight = x.HOrVLayoutGroup.childForceExpandWidth = true)

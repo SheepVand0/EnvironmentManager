@@ -57,7 +57,8 @@ namespace EnvironmentManager.Core.UI.ProfileEdit
             Templates.FullRectLayout(
                 EMText.Make("Title")
                     .Bind(ref m_Title)
-                    .SetFontSize(5),
+                    .SetFontSize(10),
+                EMSecondaryButton.Make("Preview", 20, 5).OnClick(async () => await EnvironmentManipulator.ShowAllOnEnvironment(true)),
                 XUIVLayout.Make(
                     XUIVScrollView.Make(
 
@@ -100,7 +101,7 @@ namespace EnvironmentManager.Core.UI.ProfileEdit
             m_AddLightButton.SetActive(false);
             m_EditMode = EEditMode.Objects;
             HideUIEditedLights();
-            HideOldEditedElements();
+            HideUIEditedObjects();
 
             Helper.DisplayListOnUI(
                 EMConfig.Instance.UserProfiles[EMConfig.Instance.SelectedIndex].EditedElements, ref m_EditedObjectsList, 
@@ -119,7 +120,7 @@ namespace EnvironmentManager.Core.UI.ProfileEdit
             m_AddLightButton.SetActive(true);
             m_EditMode = EEditMode.Lights;
             HideUIEditedObjects();
-            HideOldEditedElements();
+            HideUIEditedLights();
 
             var l_Lights = EMConfig.Instance.UserProfiles[EMConfig.Instance.SelectedIndex].EditedLights;
 
@@ -147,18 +148,6 @@ namespace EnvironmentManager.Core.UI.ProfileEdit
 
         ////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////
-
-        private void HideOldEditedElements()
-        {
-            if (m_EditMode == EEditMode.Lights)
-            {
-                HideUIEditedObjects();
-            }
-            else
-            {
-                HideUIEditedLights();
-            }
-        }
 
         private void HideUIEditedLights()
         {

@@ -72,6 +72,8 @@ namespace EnvironmentManager.Config
             [JsonProperty] internal List<EMEditedElement> EditedElements = new List<EMEditedElement>();
             [JsonProperty] internal List<EMEditedLight> EditedLights = new List<EMEditedLight>();
 
+            [JsonProperty] internal int RingsCount = 16;
+
             [JsonProperty] internal bool InvertLights;
             internal EMProfile()
             {

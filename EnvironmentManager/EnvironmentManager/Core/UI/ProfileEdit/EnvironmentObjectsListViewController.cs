@@ -27,7 +27,7 @@ namespace EnvironmentManager.Core.UI.ProfileEdit
             Templates.FullRectLayout(
                 XUIVLayout.Make(
                     XUIVScrollView.Make(
-                        
+
                     ).Bind(ref m_ObjectsScrollView)
                 ).OnReady(x => x.CSizeFitter.verticalFit = x.CSizeFitter.horizontalFit = UnityEngine.UI.ContentSizeFitter.FitMode.Unconstrained)
                 .OnReady(x => x.HOrVLayoutGroup.childForceExpandHeight = x.HOrVLayoutGroup.childForceExpandWidth = true)
@@ -36,10 +36,28 @@ namespace EnvironmentManager.Core.UI.ProfileEdit
                 {
                     var l_EditedElement = new EMConfig.EMEditedElement();
                     l_EditedElement.Name = m_SelectedObject;
+                    GameObject l_Object = GameObject.Find(l_EditedElement.Name);
+                    l_EditedElement.CustomPosition = l_Object.transform.localPosition;
+                    l_EditedElement.CustomRotationEulers = l_Object.transform.localRotation.eulerAngles;
+                    l_EditedElement.CustomScale = l_Object.transform.localScale;
                     EMConfig.Instance.UserProfiles[EMConfig.Instance.SelectedIndex].EditedElements.Add(l_EditedElement);
                     EMConfig.Instance.Save();
                     ProfileEditViewController.Instance.SetToEditedElements();
-                })
+                    EnvironmentManipulator.ApplyProfile(EMConfig.Instance.UserProfiles[EMConfig.Instance.SelectedIndex]);
+                }),
+                XUIHLayout.Make(
+                    EMText.Make("Rings count: "),
+                    EMSlider.Make().OnValueChanged(x =>
+                    {
+                        EMConfig.Instance.UserProfiles[EMConfig.Instance.SelectedIndex].RingsCount = (int)x;
+                        EMConfig.Instance.Save();
+                        EnvironmentManipulator.ApplyProfile(EMConfig.Instance.UserProfiles[EMConfig.Instance.SelectedIndex]);
+                    })
+                    .SetMinValue(0).SetMaxValue(16)
+                    .SetIncrements(1)
+                    .SetInteger(true)
+                    .SetValue(EMConfig.Instance.UserProfiles[EMConfig.Instance.SelectedIndex].RingsCount, false)
+                )
             )
             .SetSpacing(0)
             .BuildUI(transform);
@@ -59,16 +77,15 @@ namespace EnvironmentManager.Core.UI.ProfileEdit
             }
 
             Helper.DisplayListOnUI(m_ObjectsNames, ref m_UIObjects,
-                m_ObjectsScrollView.Element.Container, () => { 
-                    var l_New = XUIListSelectable<string>.Make("EnvironmentObjectList");
-                    l_New.OnSelected((xx) => m_SelectedObject = xx);
+                m_ObjectsScrollView.Element.Container, () => {
+                    XUIListSelectable<string> l_New;
+                    (l_New = XUIListSelectable<string>.Make("EnvironmentObjectList")).SetWidth(80);
+                    l_New.OnSelected((xx) => { m_SelectedObject = xx; });
                     return l_New;
                 }, 
                 (x, y) => {
                     y.SetData(x, x);
                 });
-
         }
-
     }
 }

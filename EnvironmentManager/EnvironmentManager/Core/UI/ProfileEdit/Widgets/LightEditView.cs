@@ -60,7 +60,14 @@ namespace EnvironmentManager.Core.UI.ProfileEdit.Widgets
                     XUIVLayout.Make(
                         XUIColorInput.Make().Bind(ref m_RightColor).OnValueChanged(OnColorChanged).SetAlphaSupport(true)
                     )
-                )
+                ),
+                EMSecondaryButton.Make("Delete", 20, 5, () =>
+                {
+                    EMConfig.Instance.UserProfiles[EMConfig.Instance.SelectedIndex].EditedLights.RemoveAt(GetIndexOfCurrentElement());
+                    EMConfig.Instance.Save();
+                    SetActive(false);
+                    EnvironmentManipulator.ApplyProfile(EMConfig.Instance.UserProfiles[EMConfig.Instance.SelectedIndex]);
+                })
             ).BuildUI(Element.LElement.transform);
         }
 
