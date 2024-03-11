@@ -61,6 +61,7 @@ namespace EnvironmentManager.Core
                 IDifficultyBeatmap l_DifficultyBeatmap = l_FinalBossChanLevel.beatmapLevelData.difficultyBeatmapSets.First().difficultyBeatmaps.Last();
                 l_SceneTransitionSetupData.Init("Standard", l_DifficultyBeatmap,
                 l_FinalBossChanLevel, l_PlayerData.overrideEnvironmentSettings,
+                l_PlayerData.colorSchemesSettings.GetSelectedColorScheme(), 
                 l_PlayerData.colorSchemesSettings.GetSelectedColorScheme(),
                 l_PlayerData.gameplayModifiers, l_PlayerData.playerSpecificSettings,
                 null, string.Empty);
