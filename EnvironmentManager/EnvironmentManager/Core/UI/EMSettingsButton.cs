@@ -17,6 +17,7 @@ namespace EnvironmentManager.Core.UI
 
         protected XUISecondaryButton m_SettingsButton;
         protected XUIToggle m_ModEnableToggle;
+        protected XUIVLayout m_Main;
 
         public static EMSettingsButton Instance = null;
 
@@ -24,7 +25,10 @@ namespace EnvironmentManager.Core.UI
         internal static EMSettingsButton Create()
         {
             if (Instance != null)
+            {
+                Instance.Init();
                 return Instance;
+            }
 
             Plugin.Log.Notice("Creating environment settings button");
             EMSettingsButton l_Button = new EMSettingsButton();
@@ -37,7 +41,7 @@ namespace EnvironmentManager.Core.UI
         internal async void Init()
         {
             //m_SettingsButton.BuildUI(p_Transform);
-
+            
             
             GameObject l_Place = null;
             await WaitUtils.Wait(() =>
@@ -49,6 +53,12 @@ namespace EnvironmentManager.Core.UI
             if (l_Place == null)
             {
                 Plugin.Log.Error("Cannot find environment settings panel");
+                return;
+            }
+
+            if (m_SettingsButton != null)
+            {
+                m_Main.Element.transform.SetParent(l_Place.transform, false);
                 return;
             }
 
@@ -65,6 +75,7 @@ namespace EnvironmentManager.Core.UI
             )
             .SetWidth(60)
             .SetHeight(20)
+            .Bind(ref m_Main)
             .BuildUI(l_Place.transform);
 
             Plugin.Log.Notice("Finished environment settings button creation");
