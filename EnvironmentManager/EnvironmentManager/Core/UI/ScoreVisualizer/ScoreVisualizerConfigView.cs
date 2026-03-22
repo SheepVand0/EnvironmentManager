@@ -33,7 +33,12 @@ namespace EnvironmentManager.Core.UI.ScoreVisualizer
         public void SetElement(int elem)
         {
             ScoreElement = elem;
-            SetText($"Element {elem}");
+            //SetText($"Element {elem}");
+        }
+
+        public void UpdateText(EMConfig.EMScoreVisualizerElement elem)
+        {
+            SetText($"{elem.MinRange} - {elem.MaxRange}");
         }
     }
 
@@ -74,11 +79,7 @@ namespace EnvironmentManager.Core.UI.ScoreVisualizer
                             ).Bind(ref ElementsContainer)
                         ).OnReady(x => x.CSizeFitter.horizontalFit = x.CSizeFitter.verticalFit = UnityEngine.UI.ContentSizeFitter.FitMode.Unconstrained)
                         .OnReady(x => x.HOrVLayoutGroup.childForceExpandWidth = x.HOrVLayoutGroup.childForceExpandHeight = true),
-                        EMSecondaryButton.Make("Add", 40, 5, () =>
-                        {
-                            ConfigElem.Add(new EMConfig.EMScoreVisualizerElement());
-                            SetProfile(ConfigElem);
-                        })
+                        EMSecondaryButton.Make("Add", 40, 5, AddConfigElem)
                     ).SetHeight(90),
                     XUIVLayout.Make(
                         EMText.Make("Min Range:"),
@@ -137,21 +138,44 @@ namespace EnvironmentManager.Core.UI.ScoreVisualizer
             EMConfig.EMScoreVisualizerProfile.Save(EMConfig.Instance.ScoreVisualizerProfile.ConfigPath, ConfigElem);
         }
 
+        private void AddConfigElem()
+        {
+            var l_New = new EMConfig.EMScoreVisualizerElement();
+            l_New.MinRange = 0;
+            l_New.MaxRange = 115;
+
+            if (ConfigElem.Any())
+            {
+                l_New.MinRange = 0;
+                l_New.MaxRange = ConfigElem.First().MinRange;
+            }
+
+            ConfigElem.Add(l_New);
+            ConfigElem.Sort(x => x.MinRange);
+            SetProfile(ConfigElem);
+        }
+
         ////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////
 
         public void SetProfile(List<EMConfig.EMScoreVisualizerElement> conf)
         {
+            foreach (var l_Item in VisualElements)
+            {
+                l_Item.SetActive(false);
+            }
+
             for (int l_i = 0; l_i < conf.Count;l_i++)
             {
                 if (l_i >= VisualElements.Count - 1)
                 {
-                    var l_Item = ScoreConfigElement.Make($"Element");
+                    var l_Item = ScoreConfigElement.Make($"x");
                     VisualElements.Add(l_Item);
                     l_Item.BuildUI(ElementsContainer.Element.Container);
                 }
 
                 VisualElements[l_i].SetElement(l_i);
+                VisualElements[l_i].UpdateText(conf[l_i]);
             }
         }
 
