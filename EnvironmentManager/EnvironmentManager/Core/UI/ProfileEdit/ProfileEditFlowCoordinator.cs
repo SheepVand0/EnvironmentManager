@@ -25,7 +25,6 @@ namespace EnvironmentManager.Core.UI.ProfileEdit
         }
 
         public ProfileEditViewController ViewController = BeatSaberUI.CreateViewController<ProfileEditViewController>();
-
         public RightProfileEditViewController RightView = BeatSaberUI.CreateViewController<RightProfileEditViewController>();
         public EnvironmentObjectsListViewController LeftView = BeatSaberUI.CreateViewController<EnvironmentObjectsListViewController>();
 

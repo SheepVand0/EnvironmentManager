@@ -12,11 +12,12 @@ namespace EnvironmentManager.Core.UI.ScoreVisualizer
 {
     internal class ScoreConfigElement : EMSecondaryButton
     {
-        protected ScoreConfigElement(string p_Label, int p_Width, int p_Height, string p_Name = "EnvironmentManagerButton", Action p_OnClick = null) : base(p_Label, p_Width, p_Height, p_Name, p_OnClick)
+        protected ScoreConfigElement(string label, int width, int height, string name = "EnvironmentManagerButton", Action onClick = null) 
+            : base(label, width, height, name, onClick)
         {
             OnClick(() =>
             {
-                ScoreVisualizerConfigView.Instance.SelectElement(ScoreElement);
+                ScoreVisualizerConfigView.Instance.SelectElement(_scoreElement);
             });
         }
 
@@ -28,12 +29,11 @@ namespace EnvironmentManager.Core.UI.ScoreVisualizer
         //////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////
 
-        int ScoreElement;
+        private int _scoreElement;
 
         public void SetElement(int elem)
         {
-            ScoreElement = elem;
-            //SetText($"Element {elem}");
+            _scoreElement = elem;
         }
 
         public void UpdateText(EMConfig.EMScoreVisualizerElement elem)
@@ -46,7 +46,7 @@ namespace EnvironmentManager.Core.UI.ScoreVisualizer
     {
         internal static new ScoreVisualizerConfigView Instance = null;
 
-        List<EMConfig.EMScoreVisualizerElement> ConfigElem;
+        List<EMConfig.EMScoreVisualizerElement> ConfigElems;
         int SelectedIndex = 0;
 
         protected EMSlider MinRangeSlider;
@@ -68,7 +68,7 @@ namespace EnvironmentManager.Core.UI.ScoreVisualizer
             Instance = this;
 
             SelectedIndex = 0;
-            ConfigElem = EMConfig.EMScoreVisualizerProfile.Load(EMConfig.Instance.ScoreVisualizerProfile.ConfigPath);
+            ConfigElems = EMConfig.EMScoreVisualizerProfile.Load(EMConfig.Instance.ScoreVisualizerProfile.ConfigPath);
 
             Templates.FullRectLayout(
                 XUIHLayout.Make(
@@ -89,7 +89,7 @@ namespace EnvironmentManager.Core.UI.ScoreVisualizer
                             .SetMaxValue(115)
                             .SetIncrements(1)
                             .SetInteger(true)
-                            .OnValueChanged(x => ConfigElem[SelectedIndex].MinRange = (int)x),
+                            .OnValueChanged(x => ConfigElems[SelectedIndex].MinRange = (int)x),
                         EMText.Make("Max Range:"),
                         EMSlider.Make()
                             .Bind(ref MaxRangeSlider)
@@ -97,45 +97,47 @@ namespace EnvironmentManager.Core.UI.ScoreVisualizer
                             .SetMaxValue(115)
                             .SetIncrements(1)
                             .SetInteger(true)
-                            .OnValueChanged(x => ConfigElem[SelectedIndex].MaxRange = (int)x),
+                            .OnValueChanged(x => ConfigElems[SelectedIndex].MaxRange = (int)x),
                         EMText.Make("Font Size:"),
                         EMSlider.Make()
                             .Bind(ref FontSizeSlider)
                             .SetMinValue(0)
                             .SetMaxValue(5)
                             .SetIncrements(0.1f)
-                            .OnValueChanged(x => ConfigElem[SelectedIndex].FontSize = x),
+                            .OnValueChanged(x => ConfigElems[SelectedIndex].FontSize = x),
                         EMText.Make("Score Text:"),
                         EMTextInput.Make("Score text")
                             .Bind(ref ScoreTextInput)
-                            .OnValueChanged(x => ConfigElem[SelectedIndex].ScoreText = x),
+                            .OnValueChanged(x => ConfigElems[SelectedIndex].ScoreText = x),
                         EMText.Make("Color:"),
                         XUIColorInput.Make()
                             .Bind(ref ScoreColorInput)
                             .SetAlphaSupport(true)
-                            .OnValueChanged(x => ConfigElem[SelectedIndex].Color = x),
+                            .OnValueChanged(x => ConfigElems[SelectedIndex].Color = x),
                         XUIHLayout.Make(
                             EMText.Make("Italic: "),
                             EMToggleSetting.Make()
                                 .Bind(ref ItalicToggle)
-                                .OnValueChanged(x => ConfigElem[SelectedIndex].Italic = x),
+                                .OnValueChanged(x => ConfigElems[SelectedIndex].Italic = x),
                             EMText.Make("Bold: "),
                             EMToggleSetting.Make()
                                 .Bind(ref BoldToggle)
-                                .OnValueChanged(x => ConfigElem[SelectedIndex].Bold = x)
+                                .OnValueChanged(x => ConfigElems[SelectedIndex].Bold = x)
                         )
                     )
                     .Bind(ref Container)
                     .SetActive(false)
                 )
             ).BuildUI(transform);
-
-            SetProfile(ConfigElem);
+            
+            EnableEditComponents(false);
+            
+            SetProfile(ConfigElems);
         }
 
         protected override void OnViewDeactivation()
         {
-            EMConfig.EMScoreVisualizerProfile.Save(EMConfig.Instance.ScoreVisualizerProfile.ConfigPath, ConfigElem);
+            EMConfig.EMScoreVisualizerProfile.Save(EMConfig.Instance.ScoreVisualizerProfile.ConfigPath, ConfigElems);
         }
 
         private void AddConfigElem()
@@ -144,15 +146,15 @@ namespace EnvironmentManager.Core.UI.ScoreVisualizer
             l_New.MinRange = 0;
             l_New.MaxRange = 115;
 
-            if (ConfigElem.Any())
+            if (ConfigElems.Any())
             {
                 l_New.MinRange = 0;
-                l_New.MaxRange = ConfigElem.First().MinRange;
+                l_New.MaxRange = ConfigElems.First().MinRange;
             }
 
-            ConfigElem.Add(l_New);
-            ConfigElem.Sort(x => x.MinRange);
-            SetProfile(ConfigElem);
+            ConfigElems.Add(l_New);
+            //ConfigElem.Sort(x => x.MinRange);
+            SetProfile(ConfigElems);
         }
 
         ////////////////////////////////////////////////////////////////
@@ -184,14 +186,23 @@ namespace EnvironmentManager.Core.UI.ScoreVisualizer
             Container.SetActive(true);
             SelectedIndex = index;
 
-            MinRangeSlider.SetValue(ConfigElem[SelectedIndex].MinRange);
-            MaxRangeSlider.SetValue(ConfigElem[SelectedIndex].MaxRange);
-            FontSizeSlider.SetValue(ConfigElem[SelectedIndex].FontSize);
-            ScoreTextInput.SetValue(ConfigElem[SelectedIndex].ScoreText);
-            ScoreColorInput.SetValue(ConfigElem[SelectedIndex].Color);
-            ItalicToggle.SetValue(ConfigElem[SelectedIndex].Italic);
-            BoldToggle.SetValue(ConfigElem[SelectedIndex].Bold);
+            EnableEditComponents(true);
+            
+            MinRangeSlider.SetValue(ConfigElems[SelectedIndex].MinRange);
+            MaxRangeSlider.SetValue(ConfigElems[SelectedIndex].MaxRange);
+            FontSizeSlider.SetValue(ConfigElems[SelectedIndex].FontSize);
+            ScoreTextInput.SetValue(ConfigElems[SelectedIndex].ScoreText);
+            ScoreColorInput.SetValue(ConfigElems[SelectedIndex].Color);
+            ItalicToggle.SetValue(ConfigElems[SelectedIndex].Italic);
+            BoldToggle.SetValue(ConfigElems[SelectedIndex].Bold);
         }
 
+        private void EnableEditComponents(bool enable)
+        {
+            Container.ForEachDirect<EMText>(x => x.SetActive(enable));
+            Container.ForEachDirect<EMSlider>(x => x.SetActive(enable));
+            Container.ForEachDirect<EMTextInput>(x => x.SetActive(enable));
+        }
+        
     }
 }
